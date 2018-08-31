@@ -1,0 +1,29 @@
+---
+title: "STA 642 - Homework 1"
+author: "Daniel Truver"
+date: "8/30/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#### (1)
+
+Okay I did it...
+
+#### (2)
+
+It's been years since Matlab. Just when I think I'm out, they pull right back in.
+
+#### (3) 
+
+suffering
+
+#### (4)
+
+pain
+
+#### (5)
+
