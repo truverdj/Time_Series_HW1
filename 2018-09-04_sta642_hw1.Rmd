@@ -19,7 +19,75 @@ It's been years since Matlab. Just when I think I'm out, they pull right back in
 
 #### (3) 
 
-suffering
+Here are some pictures. The case of $\phi=-1$ did not fly in matlab with the conditional parametrization...
+
+$$
+x_r\mid x_0 \sim N(\phi^rx_0, v_r); \quad v_r = \frac{v(1-\phi^{2r})}{1-\phi^2}
+$$
+
+...for obvious reasons. Additionally, $\phi=2$ exhibited some odd behavior that I cannot explain.
+
+The code is here:
+
+```
+X_0 = [0, 10];
+PHI = [.5, 2, -1, -.5];
+ts = ones(8,100);
+v = 1;
+s = 1;
+i = 1;
+rng(642);
+for x_0 = X_0
+    for phi = PHI
+        for r = 1:100
+            ts(i, r) = normrnd(phi^r*x_0, v * ( 1-phi^(2*r) ) / (1-phi^2));
+        end
+        i = i+1
+    end
+end
+plot(1:100, ts(8,1:100))
+title("x_0 = 10, phi = -0.5")
+xlabel("t")
+ylabel("x_t")
+PHI_n = ones(100,100);
+ts2 = ones(4,100)
+X_0 = [0, 10];
+PHI = [0.5, -0.5];
+x = ones(1,100);
+j = 1
+for x_0 = X_0
+    for phi = PHI
+        for n = 1:100
+            x(n) = phi^(n-1);
+        end
+        for i = 1:100
+            PHI_n(i, i:100) = x(1:(100-(i-1)));
+            PHI_n(i:100, i) = x(1:(100-(i-1)));
+        end
+        ts2(j, 1:100) = mvnrnd(x_0*ones(1,100), PHI_n)
+        j = j + 1
+    end
+end
+plot(1:100, ts2(4,1:100))
+title("x_0 = 10, phi = -0.5 (joint)")
+xlabel("t")
+ylabel("x_t")
+```
+
+Plots with their respective labels follow. It seems that the joint produced more, how should we say, believable series. 
+
+![](hw1_figure3-1.png)
+![](hw1_figure3-1-j.png)
+![](hw1_figure3-2.png)
+![](hw1_figure3-3.png)
+![](hw1_figure3-4.png)
+![](hw1_figure3-4-j.png)
+![](hw1_figure3-5.png)
+![](hw1_figure3-5-j.png)
+![](hw1_figure3-6.png)
+![](hw1_figure3-7.png)
+![](hw1_figure3-8.png)
+![](hw1_figure3-8-j.png)
 
 #### (4)
 
@@ -27,3 +95,25 @@ pain
 
 #### (5)
 
+##### (a)
+
+Integrating out the variance term from a Normal-Inverse Gamma should give a Student's $t$ distribution. keeping with the instructions to no reinvent the wheel, we proceed.   
+Assuming the parametrization of the Gamma that I know and love from the Hoff book (601),
+
+$$
+\begin{aligned}
+v\mid D_{t-1} \sim InvGa(n_{t-1}/2, 2/n_{t-1}s_{t-1}).
+\end{aligned}
+$$
+
+We then have:
+
+$$
+\phi \sim t_{n_{t-1}}\left(m_{t-1}, \frac{4C_{t-1}}{n_{t-1}^2s_{t-1}^2}\right)
+$$
+
+##### (b)
+
+$$
+\int (x_t\mid \phi, v, D_{t-1}) \cdot (\phi\mid v, D_{t-1})\ d\phi
+$$
